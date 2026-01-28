@@ -55,7 +55,7 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 # Default model to use for inference (replace with your model path)
-DEFAULT_MODEL_ID = "heep-universal/heep-universal-v1"
+DEFAULT_MODEL_ID = "bc7ec356/heep-universal"
 
 # Audio processing settings
 CHUNK_LENGTH_S = 30  # Process audio in 30-second chunks
