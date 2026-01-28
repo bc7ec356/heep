@@ -259,6 +259,3 @@ This implementation accompanies the paper:
 | Eq. 9: τₖ₊₁ = τₖ × g | `heep/selection/progressive.py` |
 | Algorithm 1 | `heep/pipeline.py:HEEPPipeline.run()` |
 
-## License
-
-[License details here]
