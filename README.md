@@ -156,7 +156,7 @@ heep/
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/heep.git
+git clone https://github.com/bc7ec356/heep.git
 cd heep
 
 # Install HEEP library dependencies
