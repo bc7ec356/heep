@@ -66,13 +66,13 @@ HEEP (High Entropy Exponential Pruning) is an entropy-based data curation method
 
 ## Mathematical Foundation
 
-### Sample Score (Equation 7)
+### Sample Score (Equation 1)
 
 The information score for each sample combines multiple entropy dimensions:
 
 ```
-S(x) = alpha_1 * H_acoustic(x) + alpha_2 * H_phonetic(x) + alpha_3 * H_linguistic(x) 
-     + alpha_4 * H_contextual(x) + alpha_5 * MI(x, D)
+S(x) = α₁·H_acoustic(x) + α₂·H_phonetic(x) + α₃·H_linguistic(x) 
+     + α₄·H_contextual(x) + β·MI(x, D)
 ```
 
 Where:
@@ -81,22 +81,32 @@ Where:
 - `H_linguistic(x)`: Vocabulary and syntax entropy measuring linguistic richness
 - `H_contextual(x)`: Domain and discourse entropy
 - `MI(x, D)`: Mutual information contribution relative to dataset
-- `alpha_1...alpha_5`: Configurable weights (default: 0.25, 0.20, 0.25, 0.15, 0.15)
+- `α₁...α₄, β`: Configurable weights (default: 0.25, 0.20, 0.25, 0.15, 0.15)
 
-### Selection Criterion (Equation 8)
+### Mutual Information (Equation 2)
+
+The mutual information between acoustic features and transcription:
+
+```
+I(x, y) = Σ_{j,ℓ} p(f_j, y_ℓ) log [p(f_j, y_ℓ) / (p(f_j)·p(y_ℓ))]
+```
+
+Where `f_j` are acoustic features (39-dim MFCC) and `y_ℓ` are linguistic features (TF-IDF weighted).
+
+### Selection Criterion
 
 Samples are selected based on a threshold:
 
 ```
-D' = {x in D : S(x) > tau}
+D' = {x ∈ D : S(x) > τ}
 ```
 
-### Progressive Filtering (Equation 9)
+### Progressive Filtering (Equation 8)
 
 The threshold increases exponentially across rounds:
 
 ```
-tau_{k+1} = tau_k * growth_factor
+τ_{k+1} = τ_k · growth_factor
 ```
 
 ### Error-Aware Adaptation
@@ -104,7 +114,7 @@ tau_{k+1} = tau_k * growth_factor
 After each training round, sample scores are adjusted based on model errors:
 
 ```
-S'(x) = S(x) + lambda_err * ErrorRelevance(x, errors_k) + lambda_cross * CrossLingualOverlap(x)
+S'(x) = S(x) + λ_err·ErrorRelevance(x, errors_k) + λ_cross·CrossLingualOverlap(x)
 ```
 
 ---
@@ -586,15 +596,15 @@ This implementation accompanies the paper:
 
 | Paper Equation | Code Location |
 |----------------|---------------|
-| Eq. 1: H(X) = -sum p(x) log p(x) | `heep/utils.py:compute_entropy()` |
-| Eq. 2: H_acoustic | `heep/entropy/acoustic.py` |
-| Eq. 3: H_phonetic | `heep/entropy/phonetic.py` |
-| Eq. 4: H_linguistic | `heep/entropy/linguistic.py` |
-| Eq. 5: H_contextual | `heep/entropy/contextual.py` |
-| Eq. 6: MI(x, D) | `heep/scoring/mutual_info.py` |
-| Eq. 7: S(x) = sum alpha_i * H_i | `heep/scoring/sample_score.py` |
-| Eq. 8: D' = {x : S(x) > tau} | `heep/selection/threshold.py` |
-| Eq. 9: tau_{k+1} = tau_k * g | `heep/selection/progressive.py` |
+| Eq. 1: S(x) = Σ αᵢ·Hᵢ(x) + β·MI(x, D) | `heep/scoring/sample_score.py` |
+| Eq. 2: I(x, y) = Σ p(fⱼ, yₗ) log[...] | `heep/scoring/mutual_info.py` |
+| H_acoustic | `heep/entropy/acoustic.py` |
+| H_phonetic | `heep/entropy/phonetic.py` |
+| H_linguistic | `heep/entropy/linguistic.py` |
+| H_contextual | `heep/entropy/contextual.py` |
+| Selection: D' = {x : S(x) > τ} | `heep/selection/threshold.py` |
+| Eq. 8: τₖ₊₁ = τₖ · g | `heep/selection/progressive.py` |
+| Error-Aware: S'(x) = S(x) + λ_err·ErrorRelevance | `heep/selection/progressive.py` |
 | Algorithm 1 | `heep/pipeline.py:HEEPPipeline.run()` |
 
 ---
@@ -604,23 +614,23 @@ This implementation accompanies the paper:
 ```
 Algorithm: HEEP Data Curation with Error-Aware Adaptation
 
-Input: Dataset D, initial threshold tau_0, growth factor g
+Input: Dataset D, initial threshold τ₀, growth factor g
 Output: Curated dataset D*
 
 1. Initialize scorer with entropy estimators
 2. Fit scorer to D (compute normalization stats, fit MI estimator)
-3. D* <- D
-4. k <- 0
+3. D* ← D
+4. k ← 0
 5. While |D*| > min_samples AND k < max_rounds:
     a. For each x in D*:
-        Compute S(x) = sum_i alpha_i * H_i(x) + MI(x, D)
+        Compute S(x) = Σᵢ αᵢ·Hᵢ(x) + β·MI(x, D)
     b. If error_patterns available:
-        Adjust S'(x) = S(x) + lambda_err * ErrorRelevance(x)
-    c. D* <- {x in D* : S'(x) > tau_k}
+        Adjust S'(x) = S(x) + λ_err·ErrorRelevance(x) + λ_cross·CrossLingualOverlap(x)
+    c. D* ← {x ∈ D* : S'(x) > τₖ}
     d. If train_callback: Train model on D*
     e. If eval_callback: Analyze errors, update error_patterns
-    f. tau_{k+1} <- tau_k * g
-    g. k <- k + 1
+    f. τₖ₊₁ ← τₖ · g
+    g. k ← k + 1
 6. Return D*
 ```
 
