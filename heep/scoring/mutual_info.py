@@ -1,17 +1,18 @@
 """
 Mutual Information Estimation for HEEP.
 
-Estimates MI(x, D) - the mutual information between a sample and the dataset,
-quantifying how much unique information a sample contributes.
+Estimates MI(x, y) - the mutual information between acoustic features and
+transcription, quantifying audio-text alignment strength.
 
-Mathematical Formulation (Paper Equation 6):
-    MI(x, D) = H(x) - H(x|D)
+Mathematical Formulation (Paper Equation 2):
+    I(x, y) = Σ_{j,ℓ} p(f_j, y_ℓ) log [p(f_j, y_ℓ) / (p(f_j)·p(y_ℓ))]
 
-In practice, we estimate this as:
-    MI(x, D) ≈ divergence between sample features and dataset feature distribution
+The paper uses the KSG estimator between two continuous representations:
+- 39-dimensional MFCC feature vector (13 coefficients + deltas + delta-deltas)
+- TF-IDF weighted vector of the transcription (continuous weights)
 
-High MI indicates a sample contains information not well-represented
-in the rest of the dataset, making it valuable for training.
+This implementation provides a simplified approximation using binning.
+High MI indicates strong audio-text alignment, valuable for training.
 """
 
 import numpy as np

@@ -4,33 +4,33 @@ A Python implementation of the HEEP data curation methodology for Automatic Spee
 
 ## Overview
 
-HEEP is an entropy-based data curation framework that prioritizes information density over data quantity. It identifies high-information training samples while progressively filtering redundant data.
+HEEP is an entropy-based data curation framework that selects training samples based on information density. It identifies high-information training samples while progressively filtering redundant data.
 
-**Core Insight**: Training on strategically selected high-entropy samples leads to better ASR models than training on larger but redundant datasets.
+**Core Insight**: Selecting training samples based on multi-dimensional entropy can improve ASR model performance while reducing computational requirements.
 
 ## Mathematical Foundation
 
-### Sample Score (Equation 7)
+### Composite Entropy Score (Equation 1)
 
 ```
-S(x) = α₁·H_acoustic(x) + α₂·H_phonetic(x) + α₃·H_linguistic(x) + α₄·H_contextual(x) + α₅·MI(x, D)
+S(x) = α_a·H_acoustic(x) + α_p·H_phonetic(x) + α_l·H_linguistic(x) + α_c·H_contextual(x) + β·MI(x, y)
 ```
 
 Where:
-- `H_acoustic(x)`: Spectral/MFCC entropy measuring acoustic diversity
-- `H_phonetic(x)`: Phoneme distribution entropy capturing phonetic complexity
-- `H_linguistic(x)`: Vocabulary and syntax entropy measuring linguistic richness
-- `H_contextual(x)`: Domain and discourse entropy
-- `MI(x, D)`: Mutual information contribution relative to dataset
-- `α₁...α₅`: Configurable weights (default: 0.25, 0.20, 0.25, 0.15, 0.15)
+- `H_acoustic(x)`: Spectral/MFCC entropy measuring realized acoustic diversity (Eq. 3)
+- `H_phonetic(x)`: Expected phonetic complexity from transcription via G2P (Eq. 4)
+- `H_linguistic(x)`: Vocabulary and syntax entropy measuring linguistic richness (Eq. 5)
+- `H_contextual(x)`: Domain and discourse entropy (Eq. 6)
+- `MI(x, y)`: Mutual information between acoustic features and transcription (Eq. 2)
+- Weights: α_a=0.25, α_p=0.20, α_l=0.25, α_c=0.15, β=0.15
 
-### Selection Criterion (Equation 8)
+### Selection Criterion (Equation 7)
 
 ```
 D' = {x ∈ D : S(x) > τ}
 ```
 
-### Progressive Filtering (Equation 9)
+### Progressive Filtering (Equation 8)
 
 ```
 τₖ₊₁ = τₖ × growth_factor
@@ -240,22 +240,25 @@ Output: Curated dataset D*
 
 This implementation accompanies the paper:
 
-> **HEEP: High Entropy Exponential Pruning for State-of-the-Art ASR Through Strategic Data Curation**
+> **HEEP: High Entropy Exponential Pruning for ASR Through Strategic Data Curation**
 >
-> We challenge the "more data is better" paradigm with HEEP, demonstrating that strategic entropy-based data curation outperforms brute-force scaling while requiring orders of magnitude fewer resources.
+> A data curation methodology that selects training samples based on information density,
+> achieving improved ASR performance through entropy-based sample selection.
 
 ## Code-to-Paper Mapping
 
 | Paper Equation | Code Location |
 |----------------|---------------|
-| Eq. 1: H(X) = -Σ p(x) log p(x) | `heep/utils.py:compute_entropy()` |
-| Eq. 2: H_acoustic | `heep/entropy/acoustic.py` |
-| Eq. 3: H_phonetic | `heep/entropy/phonetic.py` |
-| Eq. 4: H_linguistic | `heep/entropy/linguistic.py` |
-| Eq. 5: H_contextual | `heep/entropy/contextual.py` |
-| Eq. 6: MI(x, D) | `heep/scoring/mutual_info.py` |
-| Eq. 7: S(x) = Σ αᵢHᵢ | `heep/scoring/sample_score.py` |
-| Eq. 8: D' = {x : S(x) > τ} | `heep/selection/threshold.py` |
-| Eq. 9: τₖ₊₁ = τₖ × g | `heep/selection/progressive.py` |
+| Eq. 1: S(x) = Σ αᵢHᵢ + β·MI | `heep/scoring/sample_score.py` |
+| Eq. 2: MI(x, y) | `heep/scoring/mutual_info.py` |
+| Eq. 3: H_acoustic | `heep/entropy/acoustic.py` |
+| Eq. 4: H_phonetic | `heep/entropy/phonetic.py` |
+| Eq. 5: H_linguistic | `heep/entropy/linguistic.py` |
+| Eq. 6: H_contextual | `heep/entropy/contextual.py` |
+| Eq. 7: D' = {x : S(x) > τ} | `heep/selection/threshold.py` |
+| Eq. 8: τₖ₊₁ = τₖ × g | `heep/selection/progressive.py` |
 | Algorithm 1 | `heep/pipeline.py:HEEPPipeline.run()` |
 
+## License
+
+[License details here]

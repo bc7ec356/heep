@@ -4,15 +4,13 @@ Contextual Entropy Estimation for HEEP.
 Computes H_contextual(x) - the entropy of contextual/domain features to measure
 domain specificity and discourse diversity of audio samples.
 
-Mathematical Formulation (Paper Equation 5):
-    H_contextual(x) = -Σ_d p(d|x) log₂ p(d|x)
+Mathematical Formulation (Paper Equation 6):
+    H_c(x) = -Σ_d p(d|x) log p(d|x) + H_disc
 
 Where:
-    - d represents domain categories
-    - p(d|x) is the probability of domain d given sample x
-
-Extended formulation includes semantic diversity:
-    H_semantic(x) = entropy of embedding distribution
+    - d represents domain categories (conversational, broadcast, meeting, etc.)
+    - p(d|x) is domain classification probability from a text classifier
+    - H_disc measures discourse marker diversity
 
 The contextual entropy captures:
 - Domain specificity (medical, legal, conversational, etc.)

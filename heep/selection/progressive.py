@@ -13,7 +13,7 @@ error-aware progressive filtering:
 4. Leverage cross-lingual feature overlap for multilingual scaling
 
 Mathematical Formulation (Paper Equation 8):
-    τₖ₊₁ = τₖ · growth_factor · (1 + ε·sin(2πk/ρ))
+    τₖ₊₁ = τₖ · growth_factor
 
 The error-aware component adjusts sample scores based on:
     S'(x) = S(x) + λ_err · ErrorRelevance(x, errors_k)

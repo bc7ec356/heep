@@ -4,14 +4,14 @@ Composite Sample Scoring for HEEP.
 Computes S(x) - the overall information score for a sample by combining
 all entropy dimensions and mutual information.
 
-Mathematical Formulation (Paper Equation 7):
+Mathematical Formulation (Paper Equation 1):
     S(x) = α₁·H_acoustic(x) + α₂·H_phonetic(x) + α₃·H_linguistic(x) 
-         + α₄·H_contextual(x) + α₅·MI(x, D)
+         + α₄·H_contextual(x) + β·MI(x, D)
 
 Where:
     - H_* are entropy components from different dimensions
     - MI(x, D) is mutual information with the dataset
-    - α₁...α₅ are configurable weights
+    - α₁...α₄, β are configurable weights (default: 0.25, 0.20, 0.25, 0.15, 0.15)
 
 The sample score determines which samples are retained during HEEP filtering.
 Higher scores indicate more informative samples.

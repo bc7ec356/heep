@@ -4,15 +4,15 @@ Acoustic Entropy Estimation for HEEP.
 Computes H_acoustic(x) - the entropy of acoustic features (MFCCs, mel-spectrograms)
 to measure spectral diversity and acoustic complexity of audio samples.
 
-Mathematical Formulation (Paper Equation 2):
-    H_acoustic(x) = -Σᵢ p(bᵢ|x) log₂ p(bᵢ|x)
+Mathematical Formulation (Paper Equation 3):
+    H_a(x) = -Σ_{t,m} p(M_m^{(t)}) log p(M_m^{(t)}) + λ·Var(Spec)
 
 Where:
-    - x is the audio sample
-    - bᵢ are discretized acoustic feature bins
-    - p(bᵢ|x) is the probability of bin bᵢ given sample x
+    - M_m^{(t)} denotes MFCC coefficient m at frame t
+    - Features are discretized into B=64 bins via quantile binning
+    - Var(Spec) measures spectral variability
 
-The acoustic entropy measures how diverse the spectral content is across
+The acoustic entropy measures realized spectral diversity across
 the audio sample. High entropy indicates varied acoustic patterns.
 """
 

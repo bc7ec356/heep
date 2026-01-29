@@ -4,15 +4,14 @@ Linguistic Entropy Estimation for HEEP.
 Computes H_linguistic(x) - the entropy of linguistic features to measure
 vocabulary richness and syntactic complexity of transcriptions.
 
-Mathematical Formulation (Paper Equation 4):
-    H_linguistic(x) = -Σ_t p(t|x) log₂ p(t|x)
+Mathematical Formulation (Paper Equation 5):
+    H_l(x) = H_uni(y) + H_bi(y)
+    H_uni(y) = -Σ_t p(t|y) log p(t|y)      [unigram token entropy]
+    H_bi(y) = -Σ_{t1,t2} p(t2|t1) log p(t2|t1)  [bigram transition entropy]
 
 Where:
     - t represents tokens (words or subwords)
-    - p(t|x) is the probability of token t in sample x
-
-Extended formulation includes bigram entropy:
-    H_bigram(x) = -Σ_{t1,t2} p(t1,t2|x) log₂ p(t2|t1,x)
+    - p(t|y) is the probability of token t in transcription y
 
 The linguistic entropy captures:
 - Vocabulary diversity (unique words used)

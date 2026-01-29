@@ -4,8 +4,8 @@ Phonetic Entropy Estimation for HEEP.
 Computes H_phonetic(x) - the entropy of phoneme distributions to measure
 phonetic diversity and complexity of audio samples.
 
-Mathematical Formulation (Paper Equation 3):
-    H_phonetic(x) = -Σ_c p(c) Σ_f p(f|c) log₂ p(f|c)
+Mathematical Formulation (Paper Equation 4):
+    H_p(x) = -Σ_c p(c) Σ_f p(f|c) log p(f|c)
 
 Where:
     - c represents phonetic contexts (preceding phonemes)
@@ -13,10 +13,10 @@ Where:
     - p(c) is the probability of context c
     - p(f|c) is the conditional probability of phoneme f given context c
 
-This is the weighted conditional entropy that captures:
-- Phoneme diversity within the sample
-- Phonotactic complexity (phoneme co-occurrence patterns)
-- Rare phoneme combinations that provide high information value
+This is the weighted conditional entropy. Phoneme sequences are obtained via
+G2P conversion (not forced alignment) to avoid circular dependency with ASR.
+This means H_p captures *expected phonetic complexity* from the transcription
+text, complementing (not duplicating) acoustic entropy H_a.
 """
 
 import numpy as np
