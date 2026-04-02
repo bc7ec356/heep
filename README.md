@@ -636,18 +636,18 @@ Output: Curated dataset D*
 ```
 ---
 
-## 🔗 Resources
-
-* **Reproducibility (Universal Model):** [https://huggingface.co/bc7ec356/heep-universal](https://huggingface.co/bc7ec356/heep-universal)
-* **Cross-Architecture Model (Indic):** [https://huggingface.co/bc7ec356/heep-indic](https://huggingface.co/bc7ec356/heep-indic)
-
----
-
 # Post-Rebuttal Update: Cross-Architecture Validation with HEEP-Indic
 
 **Addressing Q1 (Gain Attribution), Q2 (Baselines), and Q3 (Base Model Dependency)**
 
 We apologize for the supplementary post after the rebuttal period. These results were finalized shortly after the deadline, and we wanted to ensure complete experimental evidence was available rather than leave placeholders.
+
+
+### 🔗 Resources
+
+* **Reproducibility (Universal Model):** [https://huggingface.co/bc7ec356/heep-universal](https://huggingface.co/bc7ec356/heep-universal)
+* **Cross-Architecture Model (Indic):** [https://huggingface.co/bc7ec356/heep-indic](https://huggingface.co/bc7ec356/heep-indic)
+
 
 ## Cross-Architecture Generalization
 
