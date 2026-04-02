@@ -21,6 +21,7 @@ HEEP is a comprehensive framework for training state-of-the-art multilingual Aut
 - [API Reference](#api-reference)
 - [Testing](#testing)
 - [Paper Reference](#paper-reference)
+- [Post-Rebuttal Update: Cross-Architecture Validation with HEEP-Indic](#post-rebuttal-update-cross-architecture-validation-with-heep-indic)
 
 ---
 
@@ -633,6 +634,62 @@ Output: Curated dataset D*
     g. k ← k + 1
 6. Return D*
 ```
+---
+
+## 🔗 Resources
+
+* **Reproducibility (Universal Model):** [https://huggingface.co/bc7ec356/heep-universal](https://huggingface.co/bc7ec356/heep-universal)
+* **Cross-Architecture Model (Indic):** [https://huggingface.co/bc7ec356/heep-indic](https://huggingface.co/bc7ec356/heep-indic)
+
+---
+
+# Post-Rebuttal Update: Cross-Architecture Validation with HEEP-Indic
+
+**Addressing Q1 (Gain Attribution), Q2 (Baselines), and Q3 (Base Model Dependency)**
+
+We apologize for the supplementary post after the rebuttal period. These results were finalized shortly after the deadline, and we wanted to ensure complete experimental evidence was available rather than leave placeholders.
+
+## Cross-Architecture Generalization
+
+To directly address concerns about generalization beyond Whisper V3 Turbo, we trained **Qwen3-ASR (1.7B)**, an architecturally distinct audio-language model, on HEEP-curated data spanning **46 Indian languages** (~4.78M utterances). The curation pipeline is identical to the one described in the paper with no architecture-specific tuning.
+
+## Hindi Benchmark Comparison (7 Benchmarks)
+
+| Model                      | Kathbath | Kathbath Noisy | CommonVoice |   FLEURS  | IndicTTS |   RESPIN  | Gramvaani |  **Avg** |
+| :------------------------- | :------: | :------------: | :---------: | :-------: | :------: | :-------: | :-------: | :------: |
+| Google STT                 |   14.3   |      16.7      |     20.8    |    19.4   |   18.3   |     –     |    59.9   |   24.9   |
+| IndicWav2Vec               |   12.2   |      16.2      |     20.2    |    18.3   |   15.0   |     –     |    42.1   |   20.7   |
+| Azure STT                  |   13.6   |      15.1      |     14.6    |    24.3   |   15.2   |     –     |    42.3   |   20.8   |
+| Nvidia Conformer-CTC Large |   12.7   |      14.2      |     21.2    |    15.7   |   12.2   |     –     |    42.6   |   19.8   |
+| IndicWhisper               |   10.3   |      12.0      |     15.0    |    11.4   |    7.6   |     –     |    26.8   |   13.8   |
+| **HEEP-Indic**             | **8.53** |    **8.97**    |   **9.96**  | **11.04** | **6.59** | **12.05** | **25.98** | **11.9** |
+
+**HEEP-Indic achieves 11.9% average Hindi WER vs. 13.8% for IndicWhisper (14% relative improvement).**
+
+## Multilingual Results (16 Languages)
+
+| Dataset       |    Ben   |    Bho   |    Chh   |    Guj   |    Hin   |    Kan   |    Mag   |    Mai   |    Mal   |    Mar   |    Odi   |    Pun   |    San   |    Tam   |    Tel   |    Urd   |  **Avg** |
+| :------------ | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: | :------: |
+| Kathbath      |   14.6   |     –    |     –    |   17.4   |    8.5   |   23.0   |     –    |     –    |   39.3   |   19.2   |   25.4   |   15.8   |   41.4   |   30.3   |   29.0   |   12.1   |   23.0   |
+| Kathbath Hard |   15.7   |     –    |     –    |   18.5   |    9.0   |   25.1   |     –    |     –    |   41.2   |   20.4   |   27.7   |   16.6   |   43.6   |   32.6   |   30.3   |   11.9   |   24.4   |
+| CommonVoice   |   21.0   |     –    |     –    |     –    |   10.0   |     –    |     –    |     –    |   46.0   |   21.5   |   34.6   |   17.5   |     –    |   34.0   |     –    |   20.6   |   25.7   |
+| FLEURS        |   22.4   |     –    |     –    |   23.3   |   11.0   |   23.1   |     –    |     –    |   34.4   |   25.5   |   33.3   |   25.0   |     –    |   35.1   |   31.9   |   22.4   |   26.1   |
+| IndicTTS      |   15.8   |     –    |     –    |   16.9   |    6.6   |   19.6   |     –    |     –    |   26.4   |   14.5   |   14.8   |     –    |     –    |   22.6   |   31.3   |     –    |   18.7   |
+| Gramvaani     |     –    |     –    |     –    |     –    |   26.0   |     –    |     –    |     –    |     –    |     –    |     –    |     –    |     –    |     –    |     –    |     –    |   26.0   |
+| RESPIN        |   32.5   |   21.3   |   21.6   |     –    |   12.1   |   45.6   |   27.7   |   41.1   |     –    |   32.7   |     –    |     –    |     –    |     –    |   37.5   |     –    |   30.2   |
+| **Avg**       | **20.4** | **21.3** | **21.6** | **19.0** | **11.9** | **27.3** | **27.7** | **41.1** | **37.5** | **22.3** | **27.2** | **18.7** | **42.5** | **30.9** | **32.0** | **16.7** | **24.6** |
+
+## Key Takeaways
+
+1. **Cross-architecture generalization confirmed.** The same HEEP pipeline improves two distinct backbones: Whisper V3 Turbo (0.8B, encoder-decoder) and Qwen3-ASR (1.7B, audio-language model), without modification.
+
+2. **Controlled multilingual evaluation.** Results span 16 languages across Indo-Aryan, Dravidian, and Classical families on standardized benchmarks with consistent evaluation protocols.
+
+3. **Model-independent scoring.** Entropy scoring operates on MFCCs, G2P phonemes, and token distributions, not model internals. The same curated dataset was used for both backbones.
+
+4. **Reproducibility.** Model weights, curation code, and training scripts for both backbones are at the anonymous repository.
+
+*We hope Reviewers 2ezj, oXjG, and S4Jd also find this supplementary evidence relevant to their earlier questions on generalization and controlled multilingual evaluation.*
 
 ---
 
