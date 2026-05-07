@@ -21,8 +21,6 @@ HEEP is a comprehensive framework for training state-of-the-art multilingual Aut
 - [API Reference](#api-reference)
 - [Testing](#testing)
 - [Paper Reference](#paper-reference)
-- [Post-Rebuttal Update: Cross-Architecture Validation with HEEP-Indic](#post-rebuttal-update-cross-architecture-validation-with-heep-indic)
-
 ---
 
 ## Overview
@@ -636,12 +634,6 @@ Output: Curated dataset D*
 ```
 ---
 
-# Post-Rebuttal Update: Cross-Architecture Validation with HEEP-Indic
-
-**Addressing Q1 (Gain Attribution), Q2 (Baselines), and Q3 (Base Model Dependency)**
-
-We apologize for the supplementary post after the rebuttal period. These results were finalized shortly after the deadline, and we wanted to ensure complete experimental evidence was available rather than leave placeholders.
-
 
 ### 🔗 Resources
 
@@ -688,8 +680,6 @@ To directly address concerns about generalization beyond Whisper V3 Turbo, we tr
 3. **Model-independent scoring.** Entropy scoring operates on MFCCs, G2P phonemes, and token distributions, not model internals. The same curated dataset was used for both backbones.
 
 4. **Reproducibility.** Model weights, curation code, and training scripts for both backbones are at the anonymous repository.
-
-*We hope Reviewers 2ezj, oXjG, and S4Jd also find this supplementary evidence relevant to their earlier questions on generalization and controlled multilingual evaluation.*
 
 ---
 
